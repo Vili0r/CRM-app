@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
+use App\Models\Tenant;
 
 class TaskController extends Controller
 {
@@ -15,28 +16,9 @@ class TaskController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreTaskRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreTaskRequest $request)
-    {
-        //
+        $tasks = Task::with('project')->paginate(20);
+        
+        return view('tasks.index', compact('tasks'));
     }
 
     /**
@@ -58,7 +40,9 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        //
+        $tenants = Tenant::all();
+
+        return view('tasks.edit', compact('task', 'tenants'));
     }
 
     /**
@@ -70,7 +54,9 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
-        //
+        $task->update($request->validated());
+
+        return redirect()->route('tenant.tasks.index')->with('success', 'Task updated successfully!'); 
     }
 
     /**
@@ -81,6 +67,8 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        //
+        $task->delete();
+
+        return redirect()->route('tenant.tasks.index')->with('error', 'Task deleted successfully!');
     }
 }

@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\Status;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class UpdateProjectRequest extends FormRequest
 {
@@ -24,11 +26,11 @@ class UpdateProjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => ['required'],
-            'description' => ['required'],
+            'title' => ['required','string'],
+            'description' => ['required','string'],
             'deadline_at' => ['required', 'date'],
             'tenant_id' => ['required', 'exists:tenants,id'],
-            'status' => ['required'],
+            'status' => ['required', new Enum(Status::class)]
         ];
     }
 }

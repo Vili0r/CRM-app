@@ -4,7 +4,7 @@
             <div class="flex justify-end m-2 p-2">
                 <x-button>
                     <a href="{{ route('tenant.projects.index') }}">
-                        Tenant Index
+                        Project Index
                     </a>
                 </x-button>
             </div>
@@ -62,10 +62,12 @@
                                 <select name="status" id="status" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
 
                                     <option value="">Please select a status</option>
-                                    {{-- @foreach (App\Models\Project::STATUS as $status)
+                                    @foreach (App\Enums\Status::cases() as $status)
                                         <option
-                                            value="{{ $status }}" {{ old('status') == $status ? 'selected' : '' }}>{{ ucfirst($status) }}</option>
-                                    @endforeach --}}
+                                            value="{{ $status->value }}" {{ old('status') == $status ? 'selected' : '' }}>
+                                            {{ $status->text() }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 @error('status')
                                     <div class="alert alert-danger mt-3 text-sm text-red-600">{{ $message }}</div>

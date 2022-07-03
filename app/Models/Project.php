@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Status;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -17,6 +18,16 @@ class Project extends Model
         'tenant_id',
         'status',
     ];
+
+    protected $casts = [
+        'deadline_at' => 'datetime',
+        'status' => Status::class,
+    ];
+
+    public function tenant()
+    {
+        return $this->belongsTo(Tenant::class);
+    }
 
     public function tasks()
     {

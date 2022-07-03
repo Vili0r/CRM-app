@@ -39,11 +39,11 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        $project = Project::create($request->validated());
+        Project::create($request->validated());
 
-        $tenant = Tenant::find($request->tenant_id);
+        //$tenant = Tenant::find($request->tenant_id);
 
-        return redirect()->route('projects.index');
+        return redirect()->route('tenant.projects.index')->with('success', 'Project successfully created!');
     }
 
     /**
@@ -54,7 +54,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        $project->load('tasks');
+        $project->loadMissing('tasks');
         
         return view('projects.show', compact('project'));
     }
@@ -69,7 +69,7 @@ class ProjectController extends Controller
     {
         $tenants = Tenant::all();
 
-        return view('projects.edit', compact('project', 'tenants', 'clients'));
+        return view('projects.edit', compact('project', 'tenants'));
     }
 
     /**
@@ -83,7 +83,7 @@ class ProjectController extends Controller
     {
         $project->update($request->validated());
 
-        return redirect()->route('projects.index')->banner('Project updated successfully.');        
+        return redirect()->route('tenant.projects.index')->with('success', 'Project updated successfully!');        
     }
 
     /**
@@ -96,6 +96,6 @@ class ProjectController extends Controller
     {
         $project->delete();
 
-        return redirect()->route('projects.index')->dangerBanner('Project deleted successfully.');
+        return redirect()->route('tenant.projects.index')->with('error', 'Project deleted successfully!');
     }
 }
